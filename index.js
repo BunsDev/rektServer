@@ -6,6 +6,8 @@ require('dotenv').config()
 const mongodb = require(`${basePath}/dataBase/mongoSetup`);
 const resourceRouter = require(`${basePath}/database/getResource`)
 const { getResourceWithAddress } = require(`${basePath}/database/addResource`)
+const resourceModel = require("../serverRekt/database/resource")
+
 const PORT = 5000;
 const app = express();
 app.use(cors());
@@ -15,10 +17,20 @@ app.use("/resource", resourceRouter);
 
 app.get('/prompt', async (req, res) => {
   console.log("wtf", req.query.value)
-  let currentGeneratedObj = await startCreating(req.query.value);
-  console.log("resChatGpt", currentGeneratedObj)
-  setConfigTodefault()
-  res.json(currentGeneratedObj);
+  let dbres = await resourceModel.findOne({ address: req.query.value });
+  console.log("found", dbres)
+  if (!dbres) {
+    console.log("return")
+
+    let currentGeneratedObj = await startCreating(req.query.value);
+    console.log("resChatGpt", currentGeneratedObj)
+    setConfigTodefault()
+    res.json(currentGeneratedObj);
+  } else {
+    console.log("emoty return")
+    res.json(dbres)
+  }
+
 });
 
 app.get('/', (req, res) => {

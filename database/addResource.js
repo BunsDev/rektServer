@@ -9,7 +9,10 @@ const addResource = async (object) => {
         let resourceData = new resourceModel({
             address: object.address,
             pfp_links: [object.pfp_link],
-            metadata_links: [object.metadata_link]
+            metadata_links: [object.metadata_link],
+            minted: object.minted,
+            tokenId: object.tokenId,
+            metadataJson: object.metadataJson
         });
 
         try {
@@ -25,29 +28,11 @@ const addResource = async (object) => {
             // res.status(500).send({ msg: "Internal server error" });
         }
     } else {
-        updateResource(object);
+        throw ("object already exists");
     }
 
 }
 
-const updateResource = async (object) => {
-    try {
-
-        let dbres = await resourceModel.findOne({ address: object.address });
-        // Item created succesfuly
-        if (dbres) {
-            dbres.metadata_links.push(object.metadata_links)
-            dbres.pfp_links.push(object.pfp_link)
-            await dbres.save();
-            console.log("saved")
-
-        }
-    } catch (error) {
-        console.log(error);
-        // Unable to save to DB
-        // res.status(500).send({ msg: "Internal server error" });
-    }
-}
 const getResourceWithAddress = async (object) => {
     try {
 

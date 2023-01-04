@@ -39,7 +39,10 @@ let hashlipsGiffer = null;
 let nftDatabaseObj = {
   address: "",
   pfp_link: "",
-  metadata_link: ""
+  metadata_link: "",
+  minted: false,
+  tokenId: "",
+  metadataJson: "",
 }
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
@@ -181,6 +184,7 @@ const addMetadata = (_dna, _edition, imageURI) => {
   }
   metadataList.push(tempMetadata);
   attributesList = [];
+  return tempMetadata;
 };
 
 const addAttributes = (_element) => {
@@ -422,11 +426,15 @@ const startCreating = async (userAddress) => {
         ? console.log("Editions left to create: ", abstractedIndexes)
         : null;
       let imageURI = await saveImage(abstractedIndexes[0]);
-      addMetadata(newDna, abstractedIndexes[0], imageURI);
+      let tempMetadataJson = addMetadata(newDna, abstractedIndexes[0], imageURI);
       let jsonURI = await saveMetaDataSingleFile(abstractedIndexes[0]);
+
       nftDatabaseObj.address = userAddress
       nftDatabaseObj.pfp_link = imageURI
       nftDatabaseObj.metadata_link = jsonURI
+      nftDatabaseObj.metadataJson = tempMetadataJson
+
+      console.log("db object", nftDatabaseObj)
       await addResource(nftDatabaseObj)
       console.log(
         `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
