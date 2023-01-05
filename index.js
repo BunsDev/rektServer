@@ -24,11 +24,9 @@ app.get('/prompt', async (req, res) => {
     buildSetup();
     let currentGeneratedObj = await startCreating(req.query.address);
     console.log("resChatGpt", currentGeneratedObj)
-    setConfigTodefault()
     res.json(currentGeneratedObj);
   } else {
     console.log("emoty return")
-    setConfigTodefault()
     res.json(dbres)
   }
   setConfigTodefault()

@@ -441,6 +441,99 @@ const startCreating = async (userAddress) => {
   return nftDatabaseObj;
 };
 
+
+
+
+const createPfpForTokenId = async (userAddress, tokenId) => {
+  let layerConfigIndex = 0;
+  let editionCount = 1;
+  let failedCount = 0;
+  let abstractedIndexes = [];
+
+  setObjectParametesToExternal()
+  console.log("later data ", layerConfigurations[0])
+
+  for (
+    let i = network == NETWORK.sol ? 0 : 1;
+    i <= layerConfigurations[0].growEditionSizeTo;
+    i++
+  ) {
+    abstractedIndexes.push(i);
+  }
+  if (shuffleLayerConfigurations) {
+    abstractedIndexes = shuffle(abstractedIndexes);
+  }
+  debugLogs
+    ? console.log("Editions left to create: ", abstractedIndexes)
+    : null;
+  const layers = layersSetup(
+    layerConfigurations[layerConfigIndex].layersOrder
+  );
+
+  let newDna = createDna(layers);
+  if (isDnaUnique(dnaList, newDna)) {
+    let results = constructLayerToDna(newDna, layers);
+    let loadedElements = [];
+
+    results.forEach((layer) => {
+      loadedElements.push(loadLayerImg(layer));
+    });
+
+    await Promise.all(loadedElements).then(async (renderObjectArray) => {
+      debugLogs ? console.log("Clearing canvas") : null;
+      ctx.clearRect(0, 0, format.width, format.height);
+      if (background.generate) {
+        drawBackground();
+      }
+      renderObjectArray.forEach((renderObject, index) => {
+        drawElement(
+          renderObject,
+          index,
+          layerConfigurations[layerConfigIndex].layersOrder.length
+        );
+
+      });
+
+      debugLogs
+        ? console.log("Editions left to create: ", abstractedIndexes)
+        : null;
+      let imageURI = await saveImage(abstractedIndexes[0]);
+      let tempMetadataJson = addMetadata(newDna, abstractedIndexes[0], imageURI);
+      let jsonURI = await saveMetaDataSingleFile(abstractedIndexes[0]);
+
+      nftDatabaseObj.address = userAddress
+      nftDatabaseObj.pfp_link = imageURI
+      nftDatabaseObj.metadata_link = jsonURI
+      nftDatabaseObj.metadataJson = tempMetadataJson
+      nftDatabaseObj.isMinted = true
+      nftDatabaseObj.tokenId = tokenId
+      console.log("db object", nftDatabaseObj)
+      await addResource(nftDatabaseObj)
+      console.log(
+        `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
+          newDna
+        )}`
+      );
+    });
+    dnaList.add(filterDNAOptions(newDna));
+    editionCount++;
+    abstractedIndexes.shift();
+  } else {
+    console.log("DNA exists!");
+    failedCount++;
+    if (failedCount >= uniqueDnaTorrance) {
+      console.log(
+        `You need more layers or elements to grow your edition to ${layerConfigurations[layerConfigIndex].growEditionSizeTo} artworks!`
+      );
+      process.exit();
+    }
+  }
+
+  writeMetaData(JSON.stringify(metadataList, null, 2));
+  return nftDatabaseObj;
+};
+
+
 const getNewLayerConfig = (walletObj) => {
   try {
 
@@ -512,15 +605,19 @@ const getNewLayerConfig = (walletObj) => {
 
     }
   } catch (e) {
+    setObjectParametesToExternal()
 
-    layerConfigurations[0].layersOrder[0].name += "/random"
-    layerConfigurations[0].layersOrder[1].name += "/random"
-    layerConfigurations[0].layersOrder[2].name += "/random"
-    layerConfigurations[0].layersOrder[3].name += "/random"
-    layerConfigurations[0].layersOrder[4].name += "/random"
-    layerConfigurations[0].layersOrder[5].name += "/random"
   }
 
+}
+
+const setObjectParametesToExternal = () => {
+  layerConfigurations[0].layersOrder[0].name += "/random"
+  layerConfigurations[0].layersOrder[1].name += "/random"
+  layerConfigurations[0].layersOrder[2].name += "/random"
+  layerConfigurations[0].layersOrder[3].name += "/random"
+  layerConfigurations[0].layersOrder[4].name += "/random"
+  layerConfigurations[0].layersOrder[5].name += "/random"
 }
 
 
@@ -544,4 +641,4 @@ const setConfigTodefault = () => {
   }
 }
 
-module.exports = { startCreating, buildSetup, getElements, setConfigTodefault };
+module.exports = { startCreating, buildSetup, getElements, setConfigTodefault, createPfpForTokenId };
