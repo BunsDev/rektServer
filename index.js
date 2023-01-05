@@ -3,9 +3,9 @@ const { startCreating, setConfigTodefault } = require(`./src/main`);
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config()
-const mongodb = require(`./dataBase/mongoSetup`);
-const resourceRouter = require(`./database/getResource`)
-const { getResourceWithAddress } = require(`./database/addResource`)
+const mongoSetup = require("./database/mongoSetup");
+const resourceRouter = require("./database/getResource")
+const { getResourceWithAddress } = require("./database/addResource")
 const resourceModel = require("./database/resource")
 
 const PORT = 5000;
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log("Server listening on port 5000");
 
-  mongodb()
+  mongoSetup()
 });
 
 // (() => {
