@@ -75,6 +75,8 @@ const checkWhitelistingForAddress = async (req, res) => {
         let merkleProofs = await getProofForAddress(req.query.address);
         if (merkleProofs.length > 0) {
             res.status(201).send({ result: merkleProofs });
+        } else {
+            res.status(400).send("Address not whitelisted");
         }
     } catch (e) {
         console.log(error);
