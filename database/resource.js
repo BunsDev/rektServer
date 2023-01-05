@@ -7,7 +7,7 @@ let resourceSchema = new Schema({
     address: { type: String, required: true },
     pfp_links: { type: String, required: true },
     metadata_links: { type: String, required: true },
-    minted: { type: Boolean, required: true },
+    isMinted: { type: Boolean, required: true },
     tokenId: { type: Number },
     metadataJson: { type: String }
 

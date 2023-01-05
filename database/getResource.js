@@ -24,7 +24,7 @@ const updateMintBoolDB = async (req, res) => {
         // Item created succesfuly
         console.log("ok", dbres)
         if (dbres) {
-            dbres.minted = req.params.minted;
+            dbres.isMinted = req.params.isMinted;
             dbres.tokenId = req.params.tokenId;
             res.status(201).send({ result: dbres });
         }
@@ -41,7 +41,7 @@ const getMetadataJson = async (req, res) => {
         // Item created succesfuly
         console.log("ok", dbres)
         if (dbres) {
-            if (dbres.minted) {
+            if (dbres.isMinted) {
                 res.status(201).send({ result: dbres.metadataJson + ".json" });
             }
 
@@ -49,7 +49,7 @@ const getMetadataJson = async (req, res) => {
     } catch (error) {
         console.log(error);
         // Unable to save to DB
-        res.status(500).send({ msg: "Token ID not yet minted" });
+        res.status(500).send({ msg: "Token ID not yet Minted" });
     }
 }
 

@@ -10,7 +10,7 @@ const addResource = async (object) => {
             address: object.address,
             pfp_links: object.pfp_link,
             metadata_links: object.metadata_link,
-            minted: object.minted,
+            isMinted: object.isMinted,
             tokenId: object.tokenId,
             metadataJson: object.metadataJson
         });

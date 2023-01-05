@@ -37,7 +37,7 @@ let nftDatabaseObj = {
   address: "",
   pfp_link: "",
   metadata_link: "",
-  minted: false,
+  isMinted: false,
   tokenId: "",
   metadataJson: "",
 }
