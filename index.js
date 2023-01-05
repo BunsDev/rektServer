@@ -16,12 +16,11 @@ app.use("/resource", resourceRouter);
 
 
 app.get('/prompt', async (req, res) => {
-
+  console.log("wtf", req.query.address)
   let dbres = await resourceModel.findOne({ address: req.query.address });
   console.log("found", dbres)
   setConfigTodefault()
   if (!dbres) {
-    console.log("return")
     buildSetup();
     let currentGeneratedObj = await startCreating(req.query.value);
     console.log("resChatGpt", currentGeneratedObj)
@@ -32,6 +31,8 @@ app.get('/prompt', async (req, res) => {
     setConfigTodefault()
     res.json(dbres)
   }
+  setConfigTodefault()
+
 });
 
 app.get('/', (req, res) => {
