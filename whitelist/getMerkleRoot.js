@@ -37,6 +37,6 @@ const getProofForAddress = (address) => {
 }
 
 // getMerkleRoot()
-console.log(getProofForAddress("0x442C531AAec5B72bed3e4f8176EbC56D8c6css8B"))
-// module.exports = { getMerkleRoot, getProofForAddress };
+// console.log(getProofForAddress("0x442C531AAec5B72bed3e4f8176EbC56D8c6css8B"))
+module.exports = { getMerkleRoot, getProofForAddress };
 

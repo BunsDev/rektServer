@@ -51,7 +51,7 @@ const getMetadataJsonWithId = async (req, res) => {
         setConfigTodefault();
         let address = "to_be_defined";
         await createPfpForTokenId(address, req.query.tokenId);
-
+        
         let dbres = await resourceModel.findOne({ tokenId: req.query.tokenId });
         if (dbres) {
             if (dbres.isMinted) {
