@@ -35,7 +35,7 @@ const getProofForAddress = (address) => {
     return getMerkleTree().getHexProof(keccak256(address));
 }
 
-// getMerkleRoot()
+getMerkleRootHash()
 // console.log(getProofForAddress("0x442C531AAec5B72bed3e4f8176EbC56D8c6css8B"))
 module.exports = { getMerkleRootHash, getProofForAddress };
 
