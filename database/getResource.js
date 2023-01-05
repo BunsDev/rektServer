@@ -79,7 +79,7 @@ const checkWhitelistingForAddress = async (req, res) => {
     } catch (e) {
         console.log(error);
         // Unable to save to DB
-        res.status(500).send({ msg: "Address not whitelisted" });
+        res.status(400).send({ msg: "Address not whitelisted" });
     }
 }
 
