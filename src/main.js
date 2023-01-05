@@ -141,7 +141,7 @@ const drawBackground = () => {
 const addMetadata = (_dna, _edition, imageURI) => {
   let dateTime = Date.now();
   let tempMetadata = {
-    name: `${namePrefix} #${_edition}`,
+    name: `${namePrefix}`,
     description: description,
     image: `${imageURI}`,
     dna: sha1(_dna),
@@ -414,7 +414,7 @@ const startCreating = async (userAddress) => {
       nftDatabaseObj.metadata_link = jsonURI
       nftDatabaseObj.metadataJson = tempMetadataJson
       nftDatabaseObj.isMinted = false
-
+      nftDatabaseObj.tokenId = 0
       console.log("db object", nftDatabaseObj)
       await addResource(nftDatabaseObj)
       console.log(

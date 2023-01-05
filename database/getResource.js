@@ -37,31 +37,36 @@ const updateMintBoolDB = async (req, res) => {
 }
 
 const getMetadataJsonWithId = async (req, res) => {
+    console.log("Getting metadata", typeof (req.params.tokenId))
+    let id = parseInt(req.params.tokenId.split(".")[0])
+    console.log("Getting id", id)
     try {
-        console.log("Getting metadata", req.params)
-        let dbres = await resourceModel.findOne({ tokenId: req.params.tokenId });
+
+        let dbres = await resourceModel.findOne({ tokenId: id });
         // Item created succesfuly
         console.log("ok", dbres)
         if (dbres) {
             if (dbres.isMinted) {
-                res.status(201).send({ result: dbres.metadataJson + ".json" });
+                res.status(200).send(dbres.metadataJson);
+            }
+
+        } else {
+            buildSetup();
+            setConfigTodefault();
+            console.log("id", id)
+            let address = "#" + id;
+            console.log("address", address)
+            await createPfpForTokenId(address, id);
+
+            let dbres = await resourceModel.findOne({ tokenId: id });
+            if (dbres) {
+                if (dbres.isMinted) {
+                    res.status(200).send(dbres.metadataJson);
+                }
             }
 
         }
-    } catch (error) {
-        buildSetup();
-        setConfigTodefault();
-        let address = "to_be_defined";
-        await createPfpForTokenId(address, req.query.tokenId);
-
-        let dbres = await resourceModel.findOne({ tokenId: req.query.tokenId });
-        if (dbres) {
-            if (dbres.isMinted) {
-                res.status(201).send({ result: dbres.metadataJson + ".json" });
-            }
-        }
-
-    }
+    } catch (e) { console.log(e) }
 }
 
 
@@ -82,6 +87,6 @@ const checkWhitelistingForAddress = async (req, res) => {
 router.get("/check-whitelist", checkWhitelistingForAddress);
 router.get("/get-data", getResourceWithAddress);
 router.post("/update-mint", updateMintBoolDB)
-router.get("/get-metadata", getMetadataJsonWithId);
+router.get("/get-metadata/:tokenId", getMetadataJsonWithId);
 
 module.exports = router;
