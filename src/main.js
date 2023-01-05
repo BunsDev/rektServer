@@ -1,13 +1,13 @@
 const basePath = process.cwd();
-const { NETWORK } = require(`${basePath}/constants/network.js`);
+const { NETWORK } = require("../constants/network");
 const fs = require("fs");
-const sha1 = require(`${basePath}/node_modules/sha1`);
-const { createCanvas, loadImage } = require(`${basePath}/node_modules/canvas`);
-const buildDir = `${basePath}/build`;
-const layersDir = `${basePath}/layers`;
-const { getREKTNft } = require(`${basePath}/models/generateNFT`)
-const { getLightHouseHash } = require(`${basePath}/lighthouse/storage`)
-const { addResource } = require(`${basePath}/database/addResource`)
+const sha1 = require(`../node_modules/sha1`);
+const { createCanvas, loadImage } = require(`../node_modules/canvas`);
+const buildDir = `./build`;
+const layersDir = `./layers`;
+const { getREKTNft } = require(`../models/generateNFT`)
+const { getLightHouseHash } = require(`../lighthouse/storage`)
+const { addResource } = require(`../database/addResource`)
 const {
   format,
   baseUri,
@@ -23,7 +23,7 @@ const {
   namePrefix,
   network,
   solanaMetadata
-} = require(`${basePath}/src/config.js`);
+} = require(`../src/config.js`);
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = format.smoothing;
@@ -399,9 +399,9 @@ const startCreating = async (userAddress) => {
           index,
           layerConfigurations[layerConfigIndex].layersOrder.length
         );
-       
+
       });
-    
+
       debugLogs
         ? console.log("Editions left to create: ", abstractedIndexes)
         : null;

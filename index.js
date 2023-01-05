@@ -1,12 +1,12 @@
 const basePath = process.cwd();
-const { startCreating, buildSetup, setConfigTodefault } = require(`${basePath}/src/main.js`);
+const { startCreating, setConfigTodefault } = require(`./src/main`);
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config()
-const mongodb = require(`${basePath}/dataBase/mongoSetup`);
-const resourceRouter = require(`${basePath}/database/getResource`)
-const { getResourceWithAddress } = require(`${basePath}/database/addResource`)
-const resourceModel = require("../serverRekt/database/resource")
+const mongodb = require(`./dataBase/mongoSetup`);
+const resourceRouter = require(`./database/getResource`)
+const { getResourceWithAddress } = require(`./database/addResource`)
+const resourceModel = require("./database/resource")
 
 const PORT = 5000;
 const app = express();
