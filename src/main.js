@@ -413,6 +413,7 @@ const startCreating = async (userAddress) => {
       nftDatabaseObj.pfp_link = imageURI
       nftDatabaseObj.metadata_link = jsonURI
       nftDatabaseObj.metadataJson = tempMetadataJson
+      nftDatabaseObj.isMinted = false
 
       console.log("db object", nftDatabaseObj)
       await addResource(nftDatabaseObj)

@@ -19,6 +19,7 @@ app.get('/prompt', async (req, res) => {
   console.log("wtf", req.query.value)
   let dbres = await resourceModel.findOne({ address: req.query.value });
   console.log("found", dbres)
+  setConfigTodefault()
   if (!dbres) {
     console.log("return")
     buildSetup();
@@ -28,9 +29,9 @@ app.get('/prompt', async (req, res) => {
     res.json(currentGeneratedObj);
   } else {
     console.log("emoty return")
+    setConfigTodefault()
     res.json(dbres)
   }
-
 });
 
 app.get('/', (req, res) => {
