@@ -38,6 +38,7 @@ const updateMintBoolDB = async (req, res) => {
 
 const getMetadataJsonWithId = async (req, res) => {
     try {
+        console.log("Getting metadata", req.params)
         let dbres = await resourceModel.findOne({ tokenId: req.params.tokenId });
         // Item created succesfuly
         console.log("ok", dbres)
