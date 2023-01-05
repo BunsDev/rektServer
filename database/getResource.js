@@ -35,7 +35,7 @@ const updateMintBoolDB = async (req, res) => {
     }
 }
 
-const getMetadataJson = async (req, res) => {
+const getMetadataJsonWithId = async (req, res) => {
     try {
         let dbres = await resourceModel.findOne({ tokenId: req.query.tokenId });
         // Item created succesfuly
@@ -61,5 +61,5 @@ const getMetadataJson = async (req, res) => {
 // router.post("/update-data", updateResource);
 router.get("/get-data", getResourceWithAddress);
 router.post("/update-mint", updateMintBoolDB)
-router.get("/get-metadata", getMetadataJson);
+router.get("/get-metadata", getMetadataJsonWithId);
 module.exports = router;

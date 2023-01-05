@@ -8,8 +8,8 @@ const addResource = async (object) => {
 
         let resourceData = new resourceModel({
             address: object.address,
-            pfp_links: object.pfp_link,
-            metadata_links: object.metadata_link,
+            pfp_link: object.pfp_link,
+            metadata_link: object.metadata_link,
             isMinted: object.isMinted,
             tokenId: object.tokenId,
             metadataJson: object.metadataJson
