@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const resourceModel = require("./resource")
 const { createPfpForTokenId, buildSetup, setConfigTodefault } = require(`../src/main`);
+const { getProofForAddress } = require("../whitelist/getMerkleRoot")
 const getResourceWithAddress = async (req, res) => {
     try {
 
@@ -51,7 +52,7 @@ const getMetadataJsonWithId = async (req, res) => {
         setConfigTodefault();
         let address = "to_be_defined";
         await createPfpForTokenId(address, req.query.tokenId);
-        
+
         let dbres = await resourceModel.findOne({ tokenId: req.query.tokenId });
         if (dbres) {
             if (dbres.isMinted) {
@@ -65,7 +66,7 @@ const getMetadataJsonWithId = async (req, res) => {
 
 const checkWhitelistingForAddress = async (req, res) => {
     try {
-        let merkleProofs = await getMerkleProofs(req.query.address);
+        let merkleProofs = await getProofForAddress(req.query.address);
         if (merkleProofs.length > 0) {
             res.status(201).send({ result: merkleProofs });
         }
