@@ -49,7 +49,7 @@ const getMetadataJson = async (req, res) => {
     } catch (error) {
         console.log(error);
         // Unable to save to DB
-        res.status(500).send({ msg: "Internal server error" });
+        res.status(500).send({ msg: "Token ID not yet minted" });
     }
 }
 
