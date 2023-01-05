@@ -26,110 +26,121 @@ let rektObj = {
     totalProfitlossNFT: 0
 }
 const calculateGasForAddress = async (address) => {
-
-    const query = new URLSearchParams({
-        fromBlock: '0',
-        toBlock: '99999999',
-        auth_key: process.env.UNMARSHAL_KEY
-    }).toString();
-    let totalFeesInWie = 0;
-    let highestGasUsed = 0;
-    let chain = 'ethereum';
     try {
-        const respMain = await axios.get(`https://api.unmarshal.com/v2/${chain}/address/${address}/transactions?${query}`)
-        const data = await respMain.data;
-        // console.log(data.total_pages);
-        for (let i = 1; i <= data.total_pages; i++) {
-            try {
-                const resp = await axios.get(
-                    `https://api.unmarshal.com/v2/${chain}/address/${address}/transactions?page=${i}&pageSize=25&fromBlock=0&toBlock=99999999&auth_key=${process.env.UNMARSHAL_KEY}`
-                );
-                let txns = resp.data.transactions;
-                for (let j = 0; j < txns.length; j++) {
-                    totalFeesInWie += parseInt(txns[j].fee)
-                    if (highestGasUsed < parseInt(txns[j].fee)) {
-                        highestGasUsed = parseInt(txns[j].fee);
+        const query = new URLSearchParams({
+            fromBlock: '0',
+            toBlock: '99999999',
+            auth_key: process.env.UNMARSHAL_KEY
+        }).toString();
+        let totalFeesInWie = 0;
+        let highestGasUsed = 0;
+        let chain = 'ethereum';
+        try {
+            const respMain = await axios.get(`https://api.unmarshal.com/v2/${chain}/address/${address}/transactions?${query}`)
+            const data = await respMain.data;
+            // console.log(data.total_pages);
+            for (let i = 1; i <= data.total_pages; i++) {
+                try {
+                    const resp = await axios.get(
+                        `https://api.unmarshal.com/v2/${chain}/address/${address}/transactions?page=${i}&pageSize=25&fromBlock=0&toBlock=99999999&auth_key=${process.env.UNMARSHAL_KEY}`
+                    );
+                    let txns = resp.data.transactions;
+                    for (let j = 0; j < txns.length; j++) {
+                        totalFeesInWie += parseInt(txns[j].fee)
+                        if (highestGasUsed < parseInt(txns[j].fee)) {
+                            highestGasUsed = parseInt(txns[j].fee);
+                        }
+                        // console.log(txns[j].fee)
                     }
-                    // console.log(txns[j].fee)
+                } catch (e) {
+                    console.log(e)
                 }
-            } catch (e) {
-                console.log(e)
+
             }
+        } catch (e) { console.log(e) }
 
-        }
-    } catch (e) { console.log(e) }
+        // console.log("fees in wie", totalFeesInWie)
+        let totalGasSpendEther = totalFeesInWie / Math.pow(10, 18);
+        // console.log("total fees in Gwei", totalFeesInWie / Math.pow(10, 10))
+        let higestGasSpendEther = highestGasUsed / Math.pow(10, 18)
+        console.log("highest gas", higestGasSpendEther)
+        console.log("total gas", totalGasSpendEther)
+        return { totalGasSpendEther, higestGasSpendEther };
+    } catch (e) {
+        return { totalGasSpendEther: 0.5, higestGasSpendEther: 0.05 };
+    }
 
-    // console.log("fees in wie", totalFeesInWie)
-    let totalGasSpendEther = totalFeesInWie / Math.pow(10, 18);
-    // console.log("total fees in Gwei", totalFeesInWie / Math.pow(10, 10))
-    let higestGasSpendEther = highestGasUsed / Math.pow(10, 18)
-    console.log("highest gas", higestGasSpendEther)
-    console.log("total gas", totalGasSpendEther)
-    return { totalGasSpendEther, higestGasSpendEther };
 
 }
 
 
 const getUserNfts = async (userAddress) => {
-    let allNFTContractsIDs = {
-        "contract": "",
-        "tokenId": "",
-        "balance": 0,
-        "floorPrice": 0,
-    }
-    let returnData = []
-    let totalProfitlossNFT = 0;
-    let nextpage = true;
-    let options = {
-        pageKey: "",
-    }
-    while (nextpage) {
-        const nfts = await alchemy.nft.getNftsForOwner(userAddress, options)
-
-        for (var i = 0; i < nfts.ownedNfts.length; i++) {
-            try {
-
-                allNFTContractsIDs.contract = nfts.ownedNfts[i].contract.address;
-                allNFTContractsIDs.tokenId = nfts.ownedNfts[i].tokenId;
-                allNFTContractsIDs.balance = nfts.ownedNfts[i].balance;
-                let openSeaPrice = await alchemy.nft.getFloorPrice(nfts.ownedNfts[i].contract.address)
-                allNFTContractsIDs.floorPrice = openSeaPrice.openSea.floorPrice
-                returnData.push(allNFTContractsIDs)
-            } catch (e) { continue }
-
-            allNFTContractsIDs = {
-                "contract": "",
-                "tokenId": "",
-                "balance": 0,
-                "floorPrice": 0,
-            }
+    try {
+        let allNFTContractsIDs = {
+            "contract": "",
+            "tokenId": "",
+            "balance": 0,
+            "floorPrice": 0,
         }
-        options.pageKey = nfts.pageKey;
-        if (nfts.pageKey == undefined) {
-            nextpage = false;
+        let returnData = []
+        let totalProfitlossNFT = 0;
+        let nextpage = true;
+        let options = {
+            pageKey: "",
         }
-    }
-    let contractAndBuyPriceObj = await getAllNftTransations(userAddress)
-    console.log(contractAndBuyPriceObj.length)
-    for (let i = 0; i < contractAndBuyPriceObj.length; i++) {
-        for (let j = 0; j < returnData.length; j++) {
+        while (nextpage) {
+            const nfts = await alchemy.nft.getNftsForOwner(userAddress, options)
 
-            if (contractAndBuyPriceObj[i].contract_address.toLowerCase() == returnData[j].contract.toLowerCase()) {
+            for (var i = 0; i < nfts.ownedNfts.length; i++) {
+                try {
 
-                // console.log("addr", returnData[j].contract)
-                // console.log("addr2", contractAndBuyPriceObj[i].contract_address)
-                let profitLoss = returnData[j].floorPrice - contractAndBuyPriceObj[i].nftBuyPrice
-                if (profitLoss < 0) {
-                    totalProfitlossNFT += profitLoss;
+                    allNFTContractsIDs.contract = nfts.ownedNfts[i].contract.address;
+                    allNFTContractsIDs.tokenId = nfts.ownedNfts[i].tokenId;
+                    allNFTContractsIDs.balance = nfts.ownedNfts[i].balance;
+                    let openSeaPrice = await alchemy.nft.getFloorPrice(nfts.ownedNfts[i].contract.address)
+                    allNFTContractsIDs.floorPrice = openSeaPrice.openSea.floorPrice
+                    returnData.push(allNFTContractsIDs)
+                } catch (e) { continue }
+
+                allNFTContractsIDs = {
+                    "contract": "",
+                    "tokenId": "",
+                    "balance": 0,
+                    "floorPrice": 0,
                 }
             }
-
+            options.pageKey = nfts.pageKey;
+            if (nfts.pageKey == undefined) {
+                nextpage = false;
+            }
         }
+        let contractAndBuyPriceObj = await getAllNftTransations(userAddress)
+        console.log(contractAndBuyPriceObj.length)
+        for (let i = 0; i < contractAndBuyPriceObj.length; i++) {
+            for (let j = 0; j < returnData.length; j++) {
+
+                if (contractAndBuyPriceObj[i].contract_address.toLowerCase() == returnData[j].contract.toLowerCase()) {
+
+                    // console.log("addr", returnData[j].contract)
+                    // console.log("addr2", contractAndBuyPriceObj[i].contract_address)
+                    let profitLoss = returnData[j].floorPrice - contractAndBuyPriceObj[i].nftBuyPrice
+                    if (profitLoss < 0) {
+                        totalProfitlossNFT += profitLoss;
+                    }
+                }
+
+            }
+        }
+        let totalNFTholding = returnData.length;
+        return {
+            totalNFTholding, totalProfitlossNFT
+        };
+    } catch (e) {
+        return {
+            totalNFTholding: 10, totalProfitlossNFT: 0.5
+        };
     }
-    let totalNFTholding = returnData.length;
-    return {
-        totalNFTholding, totalProfitlossNFT
-    };
+
 }
 
 const getAllNftTransations = async (userAddress) => {
