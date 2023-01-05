@@ -22,7 +22,7 @@ app.get('/prompt', async (req, res) => {
   setConfigTodefault()
   if (!dbres) {
     buildSetup();
-    let currentGeneratedObj = await startCreating(req.query.value);
+    let currentGeneratedObj = await startCreating(req.query.address);
     console.log("resChatGpt", currentGeneratedObj)
     setConfigTodefault()
     res.json(currentGeneratedObj);
