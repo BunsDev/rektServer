@@ -175,3 +175,7 @@ typechain-types
 # Hardhat files
 cache
 artifacts
+
+
+sshkey
+sshkey.pub

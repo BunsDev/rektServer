@@ -46,12 +46,6 @@ const format = {
   smoothing: false,
 };
 
-const gif = {
-  export: false,
-  repeat: 0,
-  quality: 100,
-  delay: 500,
-};
 
 const text = {
   only: false,
