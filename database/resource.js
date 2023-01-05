@@ -1,6 +1,43 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
+let metadataSchema = new Schema({
+
+    "name": { type: String },
+    "description": { type: String },
+    "image": { type: String },
+    "dna": { type: String },
+    "edition": { type: Number },
+    "date": { type: Date },
+    "attributes": [
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        },
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        },
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        },
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        },
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        },
+        {
+            "trait_type": { type: String },
+            "value": { type: String }
+        }
+    ],
+    "compiler": { type: String }
+
+}, { timestamps: true })
 
 let resourceSchema = new Schema({
 
@@ -9,7 +46,7 @@ let resourceSchema = new Schema({
     metadata_links: { type: String, required: true },
     isMinted: { type: Boolean, required: true },
     tokenId: { type: Number },
-    metadataJson: { type: String }
+    metadataJson: { type: metadataSchema }
 
 }, { timestamps: true })
 
