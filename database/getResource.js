@@ -20,12 +20,12 @@ const getResourceWithAddress = async (req, res) => {
 
 const updateMintBoolDB = async (req, res) => {
     try {
-        let dbres = await resourceModel.findOne({ address: req.params.address });
+        let dbres = await resourceModel.findOne({ address: req.query.address });
         // Item created succesfuly
         console.log("ok", dbres)
         if (dbres) {
-            dbres.isMinted = req.params.isMinted;
-            dbres.tokenId = req.params.tokenId;
+            dbres.isMinted = req.body.isMinted;
+            dbres.tokenId = req.body.tokenId;
             res.status(201).send({ result: dbres });
         }
     } catch (error) {
@@ -37,7 +37,7 @@ const updateMintBoolDB = async (req, res) => {
 
 const getMetadataJson = async (req, res) => {
     try {
-        let dbres = await resourceModel.findOne({ tokenId: req.params.tokenId });
+        let dbres = await resourceModel.findOne({ tokenId: req.query.tokenId });
         // Item created succesfuly
         console.log("ok", dbres)
         if (dbres) {

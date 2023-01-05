@@ -302,26 +302,31 @@ const getProfitLossWithTokenAddress = async (userAddress, getChain, tokenAddress
 
 
 const getREKTNft = async (userAddress) => {
-    if (userAddress.length < 18) {
-        userAddress = await alchemy.core.resolveName(userAddress);
-        console.log("userAddressLength: ", userAddress)
+    try {
+        if (userAddress.length < 18) {
+            userAddress = await alchemy.core.resolveName(userAddress);
+            console.log("userAddressLength: ", userAddress)
 
+        }
+
+        let data = await Promise.all([calculateGasForAddress(userAddress), getCurrentTokenBalance(userAddress, "ethereum"), getUserNfts(userAddress)]);
+        let gasObj = data[0]
+        let tokenBalanceObj = data[1]
+        let nftObj = data[2]
+
+        rektObj.totalGasSpendEther = gasObj.totalGasSpendEther
+        rektObj.higestGasSpendEther = gasObj.higestGasSpendEther
+        rektObj.numberOfUnVerifiedToken = tokenBalanceObj.numberOfUnVerifiedToken
+        rektObj.totalNFTholding = nftObj.totalNFTholding
+        rektObj.totalProfitOrLossTokens = -tokenBalanceObj.totalLossUSD
+        rektObj.totalProfitlossNFT = -nftObj.totalProfitlossNFT
+
+        console.log(rektObj)
+        return rektObj
+    } catch (e) {
+        console.log(e)
     }
 
-    let data = await Promise.all([calculateGasForAddress(userAddress), getCurrentTokenBalance(userAddress, "ethereum"), getUserNfts(userAddress)]);
-    let gasObj = data[0]
-    let tokenBalanceObj = data[1]
-    let nftObj = data[2]
-
-    rektObj.totalGasSpendEther = gasObj.totalGasSpendEther
-    rektObj.higestGasSpendEther = gasObj.higestGasSpendEther
-    rektObj.numberOfUnVerifiedToken = tokenBalanceObj.numberOfUnVerifiedToken
-    rektObj.totalNFTholding = nftObj.totalNFTholding
-    rektObj.totalProfitOrLossTokens = -tokenBalanceObj.totalLossUSD
-    rektObj.totalProfitlossNFT = -nftObj.totalProfitlossNFT
-
-    console.log(rektObj)
-    return rektObj
 }
 
 module.exports = { getREKTNft }
@@ -332,7 +337,7 @@ module.exports = { getREKTNft }
     //     console.timeEnd();
     // })()
 
-//getUserNfts("0x7D1c8E35fa16Ee32f11a882B3E634cCbaE07b790")
+//getREKTNft("0x7D1c8E35fa16Ee32f11a882B3E634cCbaE07b790")
 //getAllNftTransations("0x7D1c8E35fa16Ee32f11a882B3E634cCbaE07b790")
 
 
