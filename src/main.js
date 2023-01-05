@@ -442,74 +442,84 @@ const startCreating = async (userAddress) => {
 };
 
 const getNewLayerConfig = (walletObj) => {
+  try {
 
-  if (walletObj.totalGasSpendEther >= 0.75) {
-    layerConfigurations[0].layersOrder[0].name += "/1-rekted"
 
-  } else if (walletObj.totalGasSpendEther >= 0.1) {
-    layerConfigurations[0].layersOrder[0].name += "/2-noLoss"
+    if (walletObj.totalGasSpendEther >= 0.75) {
+      layerConfigurations[0].layersOrder[0].name += "/1-rekted"
 
-  } else {
-    layerConfigurations[0].layersOrder[0].name += "/3-Lucky"
+    } else if (walletObj.totalGasSpendEther >= 0.1) {
+      layerConfigurations[0].layersOrder[0].name += "/2-noLoss"
 
+    } else {
+      layerConfigurations[0].layersOrder[0].name += "/3-Lucky"
+
+    }
+
+    if (walletObj.numberOfUnVerifiedToken >= 20) {
+      layerConfigurations[0].layersOrder[1].name += "/1-rekted"
+
+    } else if (walletObj.numberOfUnVerifiedToken >= 10) {
+      layerConfigurations[0].layersOrder[1].name += "/2-noLoss"
+
+    } else {
+      layerConfigurations[0].layersOrder[1].name += "/3-Lucky"
+    }
+
+
+    if (walletObj.totalProfitlossNFT >= 0.75) {
+      layerConfigurations[0].layersOrder[2].name += "/1-rekted"
+
+    } else if (walletObj.totalProfitlossNFT >= 0.25) {
+      layerConfigurations[0].layersOrder[2].name += "/2-noLoss"
+
+    } else {
+      layerConfigurations[0].layersOrder[2].name += "/3-Lucky"
+
+    }
+
+
+    if (walletObj.higestGasSpendEther >= 0.2) {
+      layerConfigurations[0].layersOrder[3].name += "/1-rekted"
+
+    } else if (walletObj.higestGasSpendEther >= 0.03) {
+      layerConfigurations[0].layersOrder[3].name += "/2-noLoss"
+
+    } else {
+      layerConfigurations[0].layersOrder[3].name += "/3-Lucky"
+
+    }
+
+    if (walletObj.totalProfitOrLossTokens >= 750) {
+      layerConfigurations[0].layersOrder[4].name += "/1-rekted"
+
+    } else if (walletObj.totalProfitOrLossTokens >= 200) {
+      layerConfigurations[0].layersOrder[4].name += "/2-noLoss"
+
+    } else {
+      layerConfigurations[0].layersOrder[4].name += "/3-Lucky"
+
+    }
+
+    if (walletObj.totalNFTholding <= 5) {
+      layerConfigurations[0].layersOrder[5].name += "/1-rekted"
+
+    } else if (walletObj.totalNFTholding <= 15) {
+      layerConfigurations[0].layersOrder[5].name += "/2-noLoss"
+
+    } else {
+      layerConfigurations[0].layersOrder[5].name += "/3-Lucky"
+
+    }
+  } catch (e) {
+
+    layerConfigurations[0].layersOrder[0].name += "random"
+    layerConfigurations[0].layersOrder[1].name += "random"
+    layerConfigurations[0].layersOrder[2].name += "random"
+    layerConfigurations[0].layersOrder[3].name += "random"
+    layerConfigurations[0].layersOrder[4].name += "random"
+    layerConfigurations[0].layersOrder[5].name += "random"
   }
-
-  if (walletObj.numberOfUnVerifiedToken >= 20) {
-    layerConfigurations[0].layersOrder[1].name += "/1-rekted"
-
-  } else if (walletObj.numberOfUnVerifiedToken >= 10) {
-    layerConfigurations[0].layersOrder[1].name += "/2-noLoss"
-
-  } else {
-    layerConfigurations[0].layersOrder[1].name += "/3-Lucky"
-  }
-
-
-  if (walletObj.totalProfitlossNFT >= 0.75) {
-    layerConfigurations[0].layersOrder[2].name += "/1-rekted"
-
-  } else if (walletObj.totalProfitlossNFT >= 0.25) {
-    layerConfigurations[0].layersOrder[2].name += "/2-noLoss"
-
-  } else {
-    layerConfigurations[0].layersOrder[2].name += "/3-Lucky"
-
-  }
-
-
-  if (walletObj.higestGasSpendEther >= 0.2) {
-    layerConfigurations[0].layersOrder[3].name += "/1-rekted"
-
-  } else if (walletObj.higestGasSpendEther >= 0.03) {
-    layerConfigurations[0].layersOrder[3].name += "/2-noLoss"
-
-  } else {
-    layerConfigurations[0].layersOrder[3].name += "/3-Lucky"
-
-  }
-
-  if (walletObj.totalProfitOrLossTokens >= 750) {
-    layerConfigurations[0].layersOrder[4].name += "/1-rekted"
-
-  } else if (walletObj.totalProfitOrLossTokens >= 200) {
-    layerConfigurations[0].layersOrder[4].name += "/2-noLoss"
-
-  } else {
-    layerConfigurations[0].layersOrder[4].name += "/3-Lucky"
-
-  }
-
-  if (walletObj.totalNFTholding <= 5) {
-    layerConfigurations[0].layersOrder[5].name += "/1-rekted"
-
-  } else if (walletObj.totalNFTholding <= 15) {
-    layerConfigurations[0].layersOrder[5].name += "/2-noLoss"
-
-  } else {
-    layerConfigurations[0].layersOrder[5].name += "/3-Lucky"
-
-  }
-
 
 }
 
@@ -527,7 +537,10 @@ const setConfigTodefault = () => {
   nftDatabaseObj = {
     address: "",
     pfp_link: "",
-    metadata_link: ""
+    metadata_link: "",
+    isMinted: false,
+    tokenId: "",
+    metadataJson: "",
   }
 }
 
