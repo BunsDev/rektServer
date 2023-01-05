@@ -1,5 +1,5 @@
 
-const whitelistAddresses = require('./whitelist.json');
+const whitelistAddresses = require('./whiteList.json');
 
 const CollectionConfig = {
     // The contract name can be updated using the following command:
