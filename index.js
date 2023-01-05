@@ -1,5 +1,5 @@
 const basePath = process.cwd();
-const { startCreating, setConfigTodefault } = require(`./src/main`);
+const { startCreating, buildSetup, setConfigTodefault } = require(`./src/main`);
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config()
@@ -21,7 +21,7 @@ app.get('/prompt', async (req, res) => {
   console.log("found", dbres)
   if (!dbres) {
     console.log("return")
-
+    buildSetup();
     let currentGeneratedObj = await startCreating(req.query.value);
     console.log("resChatGpt", currentGeneratedObj)
     setConfigTodefault()
