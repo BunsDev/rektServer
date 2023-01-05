@@ -513,12 +513,12 @@ const getNewLayerConfig = (walletObj) => {
     }
   } catch (e) {
 
-    layerConfigurations[0].layersOrder[0].name += "random"
-    layerConfigurations[0].layersOrder[1].name += "random"
-    layerConfigurations[0].layersOrder[2].name += "random"
-    layerConfigurations[0].layersOrder[3].name += "random"
-    layerConfigurations[0].layersOrder[4].name += "random"
-    layerConfigurations[0].layersOrder[5].name += "random"
+    layerConfigurations[0].layersOrder[0].name += "/random"
+    layerConfigurations[0].layersOrder[1].name += "/random"
+    layerConfigurations[0].layersOrder[2].name += "/random"
+    layerConfigurations[0].layersOrder[3].name += "/random"
+    layerConfigurations[0].layersOrder[4].name += "/random"
+    layerConfigurations[0].layersOrder[5].name += "/random"
   }
 
 }

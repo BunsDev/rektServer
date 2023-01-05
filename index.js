@@ -16,8 +16,8 @@ app.use("/resource", resourceRouter);
 
 
 app.get('/prompt', async (req, res) => {
-  console.log("wtf", req.query.value)
-  let dbres = await resourceModel.findOne({ address: req.query.value });
+
+  let dbres = await resourceModel.findOne({ address: req.query.address });
   console.log("found", dbres)
   setConfigTodefault()
   if (!dbres) {
